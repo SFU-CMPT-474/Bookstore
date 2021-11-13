@@ -1,58 +1,72 @@
-import React from "react";
-import "../../common/styles/gallery.css";
-import { API } from "aws-amplify";
-import CategoryGalleryBook from "./CategoryGalleryBook";
-import { Book } from "../bestSellers/BestSellerProductRow";
+import React from "react"
+import "../../common/styles/gallery.css"
+import { API } from "aws-amplify"
+import axios from "axios"
+import CategoryGalleryBook from "./CategoryGalleryBook"
+import { Book } from "../bestSellers/BestSellerProductRow"
 
 interface CategoryGalleryProps {
-  match: any;
+  match: any
 }
 
 interface CategoryGalleryState {
-  isLoading: boolean;
-  books: Book[];
+  isLoading: boolean
+  books: Book[]
 }
 
-export class CategoryGallery extends React.Component<CategoryGalleryProps, CategoryGalleryState> {
+export class CategoryGallery extends React.Component<
+  CategoryGalleryProps,
+  CategoryGalleryState
+> {
   constructor(props: CategoryGalleryProps) {
-    super(props);
+    super(props)
 
     this.state = {
       isLoading: true,
-      books: []
-    };
+      books: [],
+    }
   }
 
   async componentDidMount() {
     try {
-      const books = await this.listBooks();
-      this.setState({ books });
+      const invokeUrl =
+        "https://grmwr7jyf3.execute-api.us-east-1.amazonaws.com/dev"
+      const res = await axios.get(`${invokeUrl}/books`)
+      console.log(
+        "Is my end point working?  --------------------------------------- >res data",
+        res.data
+      )
+      const books = res.data
+      this.setState({ books })
     } catch (e) {
-      alert(e);
+      alert(e)
     }
 
-    this.setState({ isLoading: false });
+    this.setState({ isLoading: false })
   }
 
-  listBooks() {
-    return API.get("books", `/books?category=${this.props.match.params.id}`, null);
-  }
+  // listBooks() {
+  //   return API.get("books", `/books`, null)
+  // }
 
   render() {
-    return (
-      this.state.isLoading ? <div className="loader" /> :
+    return this.state.isLoading ? (
+      <div className="loader" />
+    ) : (
       <div>
         <div className="well-bs no-radius">
           <div className="container-category">
             <h3>{this.props.match.params.id}</h3>
             <div className="row">
-              {this.state.books.map(book => <CategoryGalleryBook book={book} key={book.id} />)}
+              {this.state.books.map((book) => (
+                <CategoryGalleryBook book={book} key={book.id} />
+              ))}
             </div>
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default CategoryGallery;
+export default CategoryGallery

@@ -1,57 +1,84 @@
-import React from "react";
-import "../../common/styles/gallery.css";
-import { LinkContainer } from "react-router-bootstrap";
-import { API } from "aws-amplify";
-import CategoryGalleryBook from "./CategoryGalleryBook";
-import { Book } from "../bestSellers/BestSellerProductRow";
+import React from "react"
+import "../../common/styles/gallery.css"
+import { LinkContainer } from "react-router-bootstrap"
+import axios from "axios"
+import CategoryGalleryBook from "./CategoryGalleryBook"
+import { Book } from "../bestSellers/BestSellerProductRow"
 
 interface CategoryGalleryTeaserProps {}
 
 interface CategoryGalleryTeaserState {
-  isLoading: boolean;
-  books: Book[];
+  isLoading: boolean
+  books: Book[]
 }
 
-export class CategoryGalleryTeaser extends React.Component<CategoryGalleryTeaserProps, CategoryGalleryTeaserState> {
+export class CategoryGalleryTeaser extends React.Component<
+  CategoryGalleryTeaserProps,
+  CategoryGalleryTeaserState
+> {
   constructor(props: CategoryGalleryTeaserProps) {
-    super(props);
+    super(props)
 
     this.state = {
       isLoading: true,
-      books: []
-    };
+      books: [],
+    }
   }
+
+  //  const invokeUrl =
+  //     "https://grmwr7jyf3.execute-api.us-east-1.amazonaws.com/dev"
+  //   try {
+  //     const res = await axios.get(`${invokeUrl}/books`)
+  //     const books = res.data
+  //     this.setState({ books })
+  //   } catch (e) {
+  //     alert(e)
+  //   }
 
   async componentDidMount() {
+    const invokeUrl =
+      "https://grmwr7jyf3.execute-api.us-east-1.amazonaws.com/dev"
     try {
-      const books = await this.listBooks();
-      this.setState({ books });
+      const res = await axios.get(`${invokeUrl}/books`)
+      const books = res.data
+      console.log(books)
+      this.setState({ books })
     } catch (e) {
-      alert(e);
+      alert(e)
     }
 
-    this.setState({ isLoading: false });
+    this.setState({ isLoading: false })
   }
 
-  listBooks() {
-    return API.get("books", "/books?category=Cookbooks", null);
-  }
+  // listBooks() {
+  //   return API.get("books", "/books?category=Cookbooks", null)
+  // }
 
   render() {
-    return (
-      this.state.isLoading ? <div className="loader" /> :
+    return this.state.isLoading ? (
+      <div className="loader" />
+    ) : (
       <div>
         <div className="well-bs no-padding-top col-md-12 no-radius">
           <div className="container-category">
-            <h3>Cookbooks <small><LinkContainer to="/category/Cookbooks"><a>Browse cookbooks</a></LinkContainer></small></h3>
+            <h3>
+              Cookbooks{" "}
+              <small>
+                <LinkContainer to="/category/Cookbooks">
+                  <a>Browse cookbooks</a>
+                </LinkContainer>
+              </small>
+            </h3>
             <div className="row">
-              {this.state.books.slice(0,4).map(book => <CategoryGalleryBook book={book} key={book.id} />)}
+              {this.state.books.slice(0, 4).map((book) => (
+                <CategoryGalleryBook book={book} key={book.id} />
+              ))}
             </div>
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default CategoryGalleryTeaser;
+export default CategoryGalleryTeaser
