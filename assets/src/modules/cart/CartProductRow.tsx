@@ -36,28 +36,11 @@ export class CartProductRow extends React.Component<
       removeLoading: false,
     }
   }
-  // async componentDidMount() {
-  //   try {
-  //     const invokeUrl =
-  //       "https://grmwr7jyf3.execute-api.us-east-1.amazonaws.com/dev"
-  //     const res = await axios.get(`${invokeUrl}/books`)
-  //     console.log(
-  //       "Is my end point working?  --------------------------------------- >res data",
-  //       res.data
-  //     )
-  //     const books = res.data
-  //     this.setState({ books })
-  //   } catch (e) {
-  //     alert(e)
-  //   }
-
-  //   this.setState({ isLoading: false })
-  // }
 
   async componentDidMount() {
     try {
       const book = await this.getBook(this.props.order)
-      console.log(book)
+      console.log("this is the book", book)
       this.setState({ book })
     } catch (e) {
       alert(e)
