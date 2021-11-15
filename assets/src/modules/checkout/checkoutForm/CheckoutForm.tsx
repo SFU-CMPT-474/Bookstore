@@ -91,7 +91,7 @@ export class CheckoutForm extends React.Component<
     }
     const res = await axios
       .post(`${invokeUrl}/orders`, params)
-      .then(() => this.setState({ toCart: true }))
+      .then(() => this.setState({ toConfirm: true }))
 
     // const orders = this.state.orders;
     // API.post("orders", "/orders", {

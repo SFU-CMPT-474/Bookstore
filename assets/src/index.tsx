@@ -30,6 +30,11 @@ Amplify.configure({
         endpoint: config.apiGateway.API_URL,
         region: config.apiGateway.REGION,
       },
+      {
+        name: "orders",
+        endpoint: config.apiGateway.API_URL,
+        region: config.apiGateway.REGION,
+      },
     ],
   },
 })
